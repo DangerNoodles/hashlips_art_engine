@@ -5,6 +5,20 @@ const isLocal = typeof process.pkg === "undefined";
 const basePath = isLocal ? process.cwd() : path.dirname(process.execPath);
 const { MODE } = require(path.join(basePath, "constants/blend_mode.js"));
 const { NETWORK } = require(path.join(basePath, "constants/network.js"));
+const { PERFORMANCE_OPTIONS } = require(path.join(
+  basePath,
+  "constants/performance.js"
+));
+
+const {
+  ORIGINAL, // disables multiprocessing - only one CPU core will be used like original
+  COMFORTABLE, // default- uses available CPU cores minus 2 - allows for multitasking
+  BACKGROUND, // uses available CPU cores minus 1 - allows for simple multitasking
+  MAXIMUM, // WARNING- uses all available CPU cores - good if engine is the only app running
+} = PERFORMANCE_OPTIONS;
+
+// Set the number of CPUs to use for intensive tasks - Dual Core CPUs will only multiprocess at MAXIMUM
+const renderPerformance = COMFORTABLE;
 
 const network = NETWORK.eth;
 
@@ -118,6 +132,7 @@ module.exports = {
   pixelFormat,
   text,
   namePrefix,
+  renderPerformance,
   network,
   solanaMetadata,
   gif,
